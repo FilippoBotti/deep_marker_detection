@@ -162,8 +162,11 @@ class Solver(object):
                 break
         plt.xlabel('X Coordinate')
         plt.ylabel('Y Coordinate')
+        plt.xticks([i/10 for i in range(150, 171, 1)])
+        plt.yticks([i/10 for i in range(150, 171, 1)])
         plt.title('Ground Truth vs. Predicted Coordinates')
         #plt.legend()
+        plt.grid(True)
         plt.show()
 
 
