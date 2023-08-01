@@ -10,8 +10,8 @@ def get_train_transform(image):
     transf = T.Compose([
         T.PILToTensor(),
         T.ConvertImageDtype(torch.float),
-        T.Normalize(mean = [0.5623], 
-                         std= [0.2856])
+        T.Normalize(mean = [0.6227], 
+                         std= [0.3223])
     ])
     return transf(image)
 def normalize_labels(labels):

@@ -44,6 +44,9 @@ class Solver(object):
                 step_size = args.step_size
                 self.scheduler = lr_scheduler.StepLR(self.optimizer, step_size=step_size, gamma=gamma)
             self.epochs = self.args.epochs
+        if self.args.mode == 'evaluate':
+            self.evaluate()
+            self.plot_loss()
 
     def save_model(self, epoch):
         # if you want to save the model
@@ -90,6 +93,8 @@ class Solver(object):
             epoch_loss = running_loss / len(self.train_loader.dataset) 
             val_loss = self.validate()
             print(f"Epoch {epoch+1}/{self.epochs}, Train Loss: {epoch_loss:.4f}, Val Loss: {val_loss:.4f}")
+            if (epoch + 1) % self.args.print_every == 0:
+                self.evaluate()
         self.save_model(epoch+1)
         print("Training finished!")
         self.evaluate()
@@ -141,12 +146,20 @@ class Solver(object):
     def debug(self):
         print("Debug")
 
-    def plot_loss(targets, predictions):
-        # Create a scatter plot
-        for (x,y) in targets:
-            plt.scatter(x,y, color='blue', label='Ground Truth')
-        for x in predictions:
-            plt.scatter(x[0][0],x[0][1], color='red', label='Predictions')
+    def plot_loss(self):
+        colors = ['blue', 'red', 'green', 'purple', 'orange', 'yellow']  # List of colors for different pairs
+        with torch.no_grad():
+            for inputs, labels in self.test_loader:
+                outputs = self.model(inputs)
+                # Create a scatter plot
+                for i, (target_x, target_y) in enumerate(outputs):
+                    pred_x, pred_y = labels[i][0], labels[i][1]
+                    color = colors[i % len(colors)]  # Get the color from the list based on the pair index
+                    
+                    plt.plot(target_x, target_y, color=color, label=f'Target {i+1}', marker='o')
+                    plt.plot(pred_x, pred_y, color=color, label=f'Prediction {i+1}', marker='o')
+                    plt.plot([target_x, pred_x], [target_y, pred_y], color=color, linestyle='-')
+                break
         plt.xlabel('X Coordinate')
         plt.ylabel('Y Coordinate')
         plt.title('Ground Truth vs. Predicted Coordinates')

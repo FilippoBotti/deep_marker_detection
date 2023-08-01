@@ -23,7 +23,7 @@ def get_args():
 
     parser.add_argument('--dataset_path', type=str, default='./dataset/single/', help='path were to save/get the dataset')
     parser.add_argument('--checkpoint_path', type=str, default='./checkpoints', help='path where to save the trained model')
-
+    parser.add_argument('--print_every', type=int, default=10, help='print losses every N iteration')
     parser.add_argument('--resume_train', action='store_true', help='load the model from checkpoint before training')
     parser.add_argument('--scheduler', action='store_true', help='add scheduler during training')
     parser.add_argument('--mode', type=str, default='train', choices=['train', 'test', 'evaluate', 'debug'], help = 'net mode (train or test)')
@@ -62,20 +62,16 @@ def main(args):
     total_dataset = CustomDataset(args.annotations_file, args.dataset_path)
     print(len(total_dataset))
 
+    total_len = len(total_dataset)
+    train_len = int(0.8 * total_len)
+    val_len = int(0.1 * total_len)
     # split the dataset in train and test set
     if args.manual_seed:
         torch.manual_seed(1)
     indices = torch.randperm(len(total_dataset)).tolist()
-    total_len = len(indices)
-    train_len = int(0.7 * total_len)
-    val_len = int(0.15 * total_len)
-
-    # Calculate the test length by just using the remainder
-    test_len = total_len - train_len - val_len
-
     dataset = torch.utils.data.Subset(total_dataset, indices[:train_len])
-    dataset_valid = torch.utils.data.Subset(total_dataset, indices[train_len:(train_len + val_len)])
-    dataset_test = torch.utils.data.Subset(total_dataset, indices[-test_len:])
+    dataset_valid = torch.utils.data.Subset(total_dataset, indices[train_len : train_len + val_len])
+    dataset_test = torch.utils.data.Subset(total_dataset, indices[train_len + val_len :])
 
     # define training and validation data loaders
     data_loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
