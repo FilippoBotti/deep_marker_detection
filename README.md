@@ -15,7 +15,7 @@ The make_dataset.py script is designed to read images and their corresponding ce
 
 ## Model Architecture
 
-The neural network architecture used in this project is a convolutional neural network (CNN). The CNN is designed to process the 32x32 input images and produce a prediction for the (x, y) coordinates of the marker center.
+The neural network architecture used in this project is a convolutional neural network (CNN).
 
 ## Training
 
