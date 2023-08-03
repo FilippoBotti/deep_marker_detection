@@ -10,8 +10,9 @@ def get_train_transform(image):
     transf = T.Compose([
         T.PILToTensor(),
         T.ConvertImageDtype(torch.float),
-        T.Normalize(mean = [0.6227], 
-                         std= [0.3223])
+         T.Normalize(mean = [0.5507], 
+            std= [0.2963])                  # center_dataset T.Normalize(mean = [0.6227], 
+                                            #                  std= [0.3223])
     ])
     return transf(image)
 def normalize_labels(labels):
@@ -43,8 +44,6 @@ class CustomDataset(Dataset):
         # Load the image
         image_path = os.path.join(self.data_dir, image_name)
         image = pil_loader(image_path)
-        # Your image preprocessing code goes here (e.g., resizing, normalization)
-        # Your image preprocessing code goes here (e.g., resizing, normalization)
         image = get_train_transform(image)
         # Convert x and y labels to PyTorch tensors
         label_tensor = torch.tensor([float(x_label),float(y_label)], dtype=torch.float32)

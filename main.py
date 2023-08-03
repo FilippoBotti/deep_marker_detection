@@ -12,22 +12,22 @@ def get_args():
 
     parser.add_argument('--model_name', type=str, default="first_train", help='name of the model to be saved/loaded')
     parser.add_argument('--annotations_file', type=str, default="./dataset/single/cropped_images.txt", help='name of the annotations file')
-
     parser.add_argument('--epochs', type=int, default=50, help='number of epochs')
     parser.add_argument('--batch_size', type=int, default=32, help='number of elements in batch size')
-
-
     parser.add_argument('--lr', type=float, default=1e-4, help='learning rate')
     parser.add_argument('--opt', type=str, default='Adam', choices=['SGD', 'Adam'], help = 'optimizer used for training')
+    parser.add_argument('--device', type=str, default='cpu', choices=['cpu', 'cuda', 'mps'], help = 'cpu used for training')
     parser.add_argument('--criterion', type=str, default='mse', choices=['mse', 'cross_entropy'], help = 'loss used for training')
-
+    parser.add_argument('--writer_path', type=str, default = "./runs/experiments", help= "The path for Tensorboard metrics")
     parser.add_argument('--dataset_path', type=str, default='./dataset/single/', help='path were to save/get the dataset')
     parser.add_argument('--checkpoint_path', type=str, default='./checkpoints', help='path where to save the trained model')
-    parser.add_argument('--print_every', type=int, default=10, help='print losses every N iteration')
+    parser.add_argument('--print_every', type=int, default=100, help='print losses every N iteration')
+    parser.add_argument('--save_every', type=int, default=10, help='save model every N epochs')
     parser.add_argument('--resume_train', action='store_true', help='load the model from checkpoint before training')
     parser.add_argument('--scheduler', action='store_true', help='add scheduler during training')
     parser.add_argument('--mode', type=str, default='train', choices=['train', 'test', 'evaluate', 'debug'], help = 'net mode (train or test)')
     parser.add_argument('--manual_seed', type=bool, default=True, help='Use same random seed to get same train/valid/test sets for every training.')
+    parser.add_argument('--use_tensorboard', type=bool, default=True, help='Use tensorboard during training.')
 
     return parser.parse_args()
 
@@ -53,9 +53,9 @@ def mean_std(loader):
 
 def main(args):
     BATCH_SIZE = args.batch_size # increase / decrease according to GPU memeory
-    if torch.cuda.is_available():
-        DEVICE = torch.device("cuda")
-    else:
+
+    DEVICE = torch.device(args.device)
+    if torch.cuda.is_available()==False and DEVICE=='cuda':
         DEVICE = torch.device("cpu")
 
     # use our dataset and defined transformations
