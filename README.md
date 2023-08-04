@@ -8,7 +8,6 @@ This PyTorch project demonstrates how to train a neural network to detect the ce
 The dataset consists of 32x32 images containing ovalised markers. The markers are ovalised as they are cut out of a larger image that is not necessarily aligned with the markers.
 Each image is labeled with the ground truth (x, y) coordinates of the center of the ovalised marker.
 The dataset consists of a total of 25147 images and is divided into 80% training, 10 validation and 10% test. 
-Images are cropped from the images proposed in folder 0003 using the algorithm in the make_dataset.py file
 
 ## Make Dataset
 

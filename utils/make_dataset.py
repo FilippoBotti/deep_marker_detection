@@ -27,20 +27,20 @@ def crop_image(image_path, center_x, center_y, image_name, index, output_file, r
     output_file.write(f"{filename} {real_center_x - top_left_x -1 :.6f} {real_center_y - top_left_y -1:.6f}\n")
 
 def main():
-    folder_name ="/Users/filippo/Desktop/università/visione_veicolo/dataset"
-    image_path = "/Users/filippo/Desktop/università/visione_veicolo/progetto/0003/left000000.pgm"
-    image_path2 = "/Users/filippo/Desktop/università/visione_veicolo/progetto/0003/left000001.pgm"
-    image_path3 = "/Users/filippo/Desktop/università/visione_veicolo/progetto/0003/left000002.pgm"
-    image_path4 = "/Users/filippo/Desktop/università/visione_veicolo/progetto/0003/left000003.pgm"
-    image_path5 = "/Users/filippo/Desktop/università/visione_veicolo/progetto/0003/left000004.pgm"
-    image_path6 = "/Users/filippo/Desktop/università/visione_veicolo/progetto/0003/left000005.pgm"
+    folder_name ="PATH"
+    image_path = "IMAGE_PATHleft000000.pgm"
+    image_path2 = "IMAGE_PATHleft000001.pgm"
+    image_path3 = "IMAGE_PATHleft000002.pgm"
+    image_path4 = "IMAGE_PATHleft000003.pgm"
+    image_path5 = "IMAGE_PATHleft000004.pgm"
+    image_path6 = "IMAGE_PATHleft000005.pgm"
 
-    image_path7 = "/Users/filippo/Desktop/università/visione_veicolo/progetto/0003/right000000.pgm"
-    image_path8 = "/Users/filippo/Desktop/università/visione_veicolo/progetto/0003/right000001.pgm"
-    image_path9 = "/Users/filippo/Desktop/università/visione_veicolo/progetto/0003/right000002.pgm"
-    image_path10 = "/Users/filippo/Desktop/università/visione_veicolo/progetto/0003/right000003.pgm"
-    image_path11 = "/Users/filippo/Desktop/università/visione_veicolo/progetto/0003/right000004.pgm"
-    image_path12 = "/Users/filippo/Desktop/università/visione_veicolo/progetto/0003/right000005.pgm"
+    image_path7 = "IMAGE_PATHright000000.pgm"
+    image_path8 = "IMAGE_PATHright000001.pgm"
+    image_path9 = "IMAGE_PATHright000002.pgm"
+    image_path10 = "IMAGE_PATHright000003.pgm"
+    image_path11 = "IMAGE_PATHright000004.pgm"
+    image_path12 = "IMAGE_PATHright000005.pgm"
     imgs = [image_path,image_path2,image_path3,image_path4,image_path5,image_path6,
             image_path7,image_path8,image_path9,image_path10,image_path11,image_path12,
             ]
