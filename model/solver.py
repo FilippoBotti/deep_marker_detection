@@ -149,13 +149,13 @@ class Solver(object):
             for inputs, labels in self.test_loader:
                 inputs, labels = inputs.to(self.device), labels.to(self.device)
                 predictions = self.model(inputs)
-                plt.figure(figsize=(8,8))
+                plt.figure(figsize=(16,8))
                 for i in range(4):
-                    plt.subplot(2, 2, i+1)
+                    plt.subplot(1, 4, i + 1)
                     center_x, center_y = predictions[i][0], predictions[i][1]
                     gt_x, gt_y = labels[i][0], labels[i][1]
-                    plt.plot(center_x, center_y, 'go', markersize=5, color='green')
                     plt.plot(gt_x, gt_y, 'go', markersize=5, color='blue')
+                    plt.plot(center_x, center_y, 'go', markersize=5, color='green')
 
                     plt.text(0,-5, f"Immagine {i}", color='black', fontsize=10, ha='left', va='top')
                     plt.text(0,-3, f"x_pred: {center_x:.6f}, y_pred: {center_y:.6f}", color='green', fontsize=8, ha='left', va='top')
