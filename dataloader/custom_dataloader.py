@@ -11,13 +11,9 @@ def get_train_transform(image):
         T.PILToTensor(),
         T.ConvertImageDtype(torch.float),
          T.Normalize(mean = [0.5507], 
-            std= [0.2963])                  # center_dataset T.Normalize(mean = [0.6227], 
-                                            #                  std= [0.3223])
+            std= [0.2963])                 
     ])
     return transf(image)
-def normalize_labels(labels):
-    transf = T.Normalize(mean= [15.9816], std=[0.3119])
-    return transf(labels)
 
 def pil_loader(path):
     # open path as file to avoid ResourceWarning
@@ -31,7 +27,6 @@ class CustomDataset(Dataset):
         self.data_file = data_file
         self.data_dir = data_dir
 
-        # Read the data from the text file and store it as a list of tuples (image_name, x_label, y_label)
         with open(self.data_file, "r") as file:
             self.data = [line.strip().split() for line in file]
 
@@ -41,11 +36,8 @@ class CustomDataset(Dataset):
     def __getitem__(self, idx):
         image_name, x_label, y_label = self.data[idx]
 
-        # Load the image
         image_path = os.path.join(self.data_dir, image_name)
         image = pil_loader(image_path)
         image = get_train_transform(image)
-        # Convert x and y labels to PyTorch tensors
         label_tensor = torch.tensor([float(x_label),float(y_label)], dtype=torch.float32)
-        #label_tensor = (label_tensor - 15.9816)/0.3119
         return image, label_tensor

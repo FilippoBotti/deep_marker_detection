@@ -14,7 +14,6 @@ class Solver(object):
     """Solver for training and testing."""
 
     def __init__(self, train_loader, valid_loader, test_loader, device, args):
-        """Initialize configurations."""
         self.args = args
         self.model_name = 'marker_detector_{}.pth'.format(self.args.model_name)
 
@@ -54,14 +53,12 @@ class Solver(object):
             self.test()
 
     def save_model(self, epoch):
-        # if you want to save the model
         checkpoint_name = "epoch" + str(epoch) + "_" + self.model_name
         check_path = os.path.join(self.args.checkpoint_path, checkpoint_name)
         torch.save(self.model.state_dict(), check_path)
         print("Model saved!")
 
     def load_model(self):
-        # function to load the model
         check_path = os.path.join(self.args.checkpoint_path, self.model_name)
         self.model.load_state_dict(torch.load(check_path, map_location=torch.device(self.device)))
         print("Model loaded!", flush=True)
@@ -69,29 +66,22 @@ class Solver(object):
     def train(self):
         self.model.train()
         for epoch in range(self.epochs):
-            # Training phase
             self.model.train()
             running_loss = 0.0
             prog_bar = tqdm(self.train_loader, total=len(self.train_loader))
             for i,data in enumerate(prog_bar):
-                # Transfer data to the GPU if available
                 inputs, labels = data
                 inputs, labels = inputs.to(self.device), labels.to(self.device)
 
-                # Zero the parameter gradients
                 self.optimizer.zero_grad()
 
-                # Forward pass
                 outputs = self.model(inputs)
 
-                # Calculate the loss
                 loss = self.criterion(outputs, labels)
 
-                # Backpropagation and optimization
                 loss.backward()
                 self.optimizer.step()
 
-                # Update statistics
                 running_loss += loss.item() * inputs.size(0)
 
                 if i % self.args.print_every == self.args.print_every - 1:  
@@ -123,16 +113,12 @@ class Solver(object):
 
         with torch.no_grad():
             for inputs, labels in self.valid_loader:
-                # Transfer data to the GPU if available
                 inputs, labels = inputs.to(self.device), labels.to(self.device)
 
-                # Forward pass
                 outputs = self.model(inputs)
 
-                # Calculate the loss
                 loss = self.criterion(outputs, labels)
 
-                # Update validation loss
                 val_loss += loss.item() * inputs.size(0)
 
         val_loss /= len(self.valid_loader.dataset)
@@ -148,10 +134,6 @@ class Solver(object):
             for inputs, labels in self.test_loader:
                 inputs, labels = inputs.to(self.device), labels.to(self.device)
                 outputs = self.model(inputs)
-                # for i in range(outputs.size()[0]):
-                #     print(f"x_pred: {outputs[i][0]:.3f}, x_gt: {labels[i][0]:.3f}")
-                #     print(f"y_pred: {outputs[i][1]:.3f}, y_gt: {labels[i][1]:.3f}")
-                #     print("\n")
                 loss = criterion(outputs, labels)
                 total_loss += loss.item() * inputs.size(0)
                 predictions.append(outputs)
@@ -197,10 +179,9 @@ class Solver(object):
         with torch.no_grad():
             for inputs, labels in self.test_loader:
                 outputs = self.model(inputs)
-                # Create a scatter plot
                 for i, (target_x, target_y) in enumerate(outputs):
                     pred_x, pred_y = labels[i][0], labels[i][1]
-                    color = colors[i % len(colors)]  # Get the color from the list based on the pair index
+                    color = colors[i % len(colors)] 
                     
                     plt.plot(target_x, target_y, color=color, label=f'Target {i+1}', marker='o')
                     plt.plot(pred_x, pred_y, color=color, label=f'Prediction {i+1}', marker='o')
@@ -211,7 +192,6 @@ class Solver(object):
         plt.xticks([i/10 for i in range(140, 161, 1)])
         plt.yticks([i/10 for i in range(140, 161, 1)])
         plt.title('Ground Truth vs. Predicted Coordinates')
-        #plt.legend()
         plt.grid(True)
         plt.show()
 

@@ -1,4 +1,5 @@
 # Marker Center Detection using PyTorch
+![Results](Figure_1.png)
 
 This PyTorch project demonstrates how to train a neural network to detect the center of ovalised markers in 32x32 images. The trained model can predict the (x, y) coordinates of the center of a ovalised marker within the given image.
 
